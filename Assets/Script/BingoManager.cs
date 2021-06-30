@@ -5,30 +5,31 @@ using UnityEngine.UI;
 
 public class BingoManager : MonoBehaviour
 {
-    [SerializeField] private GridLayoutGroup bingoField;
     [SerializeField] private GameObject bingoPrefab;
+    [SerializeField] private GridLayoutGroup m_group;
 
-    private Cell[,] cell;
-    int r = 5;
-    int c = 5;
-    private void Start()
+    const int row = 5;
+    const int column = 5;
+
+    private Cell[,] cells = new Cell[row, column];
+
+    void Start()
     {
-        cell = new Cell[r, c];
-        for (int row = 0; row < r; row++)
+        for (int i = 0; i < row; i++)
         {
-            for (int column = 0; column < c; column++)
+            for (int j = 0; j < column; j++)
             {
-                CreateBingo(row, column, cell);
+                CreateCell(i, j, cells);
             }
         }
     }
 
-    void CreateBingo(int x, int y, object[,] cell)
+    private void CreateCell(int x, int y, object[,] cells)
     {
-        var bingo = Instantiate(bingoPrefab);
-        var parent = bingoField.gameObject.transform;
-        bingo.transform.SetParent(parent);
+        var cell = Instantiate(bingoPrefab);
+        var parent = m_group.gameObject.transform;
+        cell.transform.SetParent(parent);
 
-        cell[x, y] = bingo;
+        cells[x, y] = cell;
     }
 }

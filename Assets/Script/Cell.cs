@@ -1,18 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
+
+public enum State
+{
+    Open,
+    Close,
+}
 
 public class Cell : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private State state = State.Close;
+
+    public State m_state
     {
-        
+        get => state;
+
+        set
+        {
+            state = value;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
