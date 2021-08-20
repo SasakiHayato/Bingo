@@ -11,9 +11,17 @@ public class BingoManager : MonoBehaviour
     CellClass[,] m_cells = new CellClass[m_wide, m_height];
 
     List<int> m_setNum = new List<int>();
+    List<int> m_alreadyNum = new List<int>();
+
+    int m_moveY = 0;
 
     void Start()
     {
+        for (int count = 1; count <= 75; count++)
+        {
+            m_alreadyNum.Add(count);
+        }
+        
         CreateCell();
     }
 
@@ -84,5 +92,90 @@ public class BingoManager : MonoBehaviour
             m_setNum.Add(num);
         }
         return num;
+    }
+
+    public void OnClick()
+    {
+        Debug.Log("押した");
+        if (m_alreadyNum.Count == 0)
+        {
+            Debug.Log("全部出た");
+            return;
+        }
+        SelectNum();
+    }
+    void SelectNum()
+    {
+        int num = Random.Range(0, 76);
+        SetOpen(num);
+    }
+    
+    void SetOpen(int num)
+    {
+        foreach (int set in m_alreadyNum)
+        {
+            if (num == set)
+            {
+                FindNum(num);
+                m_alreadyNum.Remove(num);
+                return;
+            }
+
+            
+        }
+        
+        SelectNum();
+        m_alreadyNum.Remove(num);
+    }
+
+    void FindNum(int targetNum)
+    {
+        for (int x = 0; x < m_wide; x++)
+        {
+            for (int y = 0; y < m_height; y++)
+            {
+                if (m_cells[x, y].RetuneStatus() == CellStatus.Open) continue;
+
+                if (m_cells[x, y].RetuneNum() == targetNum)
+                {
+                    m_cells[x, y].SetStatus(CellStatus.Open);
+                    CheckBingo();
+                    return;
+                }
+            }
+        }
+        Debug.Log("no");
+    }
+
+    void CheckBingo()
+    {
+        Debug.Log("Check");
+        CheckVertical();
+    }
+
+    void CheckVertical()
+    {
+        int count = 0;
+        for (int x = 0; x < m_wide; x++)
+        {
+            if (m_cells[x, m_moveY].RetuneStatus() == CellStatus.Open)
+            {
+                count++;
+                IsBingo(count);
+            }
+        }
+
+        if (m_moveY != 5)
+        {
+            CheckVertical();
+        }
+    }
+
+    void IsBingo(int count)
+    {
+        if (count == 5)
+        {
+            Debug.Log("BINGO");
+        }
     }
 }

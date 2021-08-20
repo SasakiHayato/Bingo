@@ -20,12 +20,18 @@ public class CellClass : MonoBehaviour
         m_status = status;
         ChengeColor();
     }
-    public CellStatus RetuneStatus() { return m_status; }
-
     void ChengeColor()
     {
         Image imageColer = GetComponent<Image>();
         if (m_status == CellStatus.Close) { imageColer.color = Color.red; }
         else if (m_status == CellStatus.Open) { imageColer.color = Color.green; }
+    }
+
+    public CellStatus RetuneStatus() { return m_status; }
+
+    public int RetuneNum()
+    {
+        int num = int.Parse(m_numText.text);
+        return num;
     }
 }
