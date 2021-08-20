@@ -13,7 +13,7 @@ public class BingoManager : MonoBehaviour
     List<int> m_setNum = new List<int>();
     List<int> m_alreadyNum = new List<int>();
 
-    int m_moveY = 0;
+    int m_count = 0;
 
     void Start()
     {
@@ -144,31 +144,78 @@ public class BingoManager : MonoBehaviour
                 }
             }
         }
-        Debug.Log("no");
+
+        //Debug.Log("No");
     }
 
     void CheckBingo()
     {
-        Debug.Log("Check");
-        CheckVertical();
+        int moveY = 0;
+        int moveX = 0;
+        int count = 0;
+        
+        CheckVertical(moveY);
+        CheckHorizontal(moveX);
+        CheckDiagonalDown(moveX, moveY, count);
+        CheckDiagonalUp(moveX = 4, moveY, count);
     }
 
-    void CheckVertical()
+    void CheckVertical(int y)
     {
+        if (y == 5) return;
         int count = 0;
         for (int x = 0; x < m_wide; x++)
         {
-            if (m_cells[x, m_moveY].RetuneStatus() == CellStatus.Open)
+            Debug.Log($"X :{x} Y :{y}");
+            if (m_cells[x, y].RetuneStatus() == CellStatus.Open)
             {
                 count++;
                 IsBingo(count);
             }
         }
-
-        if (m_moveY != 5)
+        y++;
+        CheckVertical(y);
+    }
+    void CheckHorizontal(int x)
+    {
+        if (x == 5) return;
+        int count = 0;
+        for (int y = 0; y < m_height; y++)
         {
-            CheckVertical();
+            if (m_cells[x, y].RetuneStatus() == CellStatus.Open)
+            {
+                count++;
+                IsBingo(count);
+            }
         }
+        x++;
+        CheckHorizontal(x);
+    }
+
+    void CheckDiagonalDown(int x, int y, int count)
+    {
+        if (x == 5 && y == 5) return;
+        if (m_cells[x, y].RetuneStatus() == CellStatus.Open)
+        {
+            count++;
+            IsBingo(count);
+        }
+        x++;
+        y++;
+        CheckDiagonalDown(x, y, count);
+    }
+
+    void CheckDiagonalUp(int x, int y, int count)
+    {
+        if (y == 5) return;
+        if (m_cells[x, y].RetuneStatus() == CellStatus.Open)
+        {
+            count++;
+            IsBingo(count);
+        }
+        x--;
+        y++;
+        CheckDiagonalUp(x, y, count);
     }
 
     void IsBingo(int count)
