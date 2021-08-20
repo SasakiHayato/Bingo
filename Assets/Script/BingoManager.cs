@@ -7,13 +7,12 @@ public class BingoManager : MonoBehaviour
     const int m_wide = 5;
     const int m_height = 5;
     [SerializeField] GameObject m_cell;
+    [SerializeField] LogText m_log;
 
     CellClass[,] m_cells = new CellClass[m_wide, m_height];
 
     List<int> m_setNum = new List<int>();
     List<int> m_alreadyNum = new List<int>();
-
-    int m_count = 0;
 
     void Start()
     {
@@ -130,6 +129,7 @@ public class BingoManager : MonoBehaviour
 
     void FindNum(int targetNum)
     {
+        m_log.SetLogText(targetNum);
         for (int x = 0; x < m_wide; x++)
         {
             for (int y = 0; y < m_height; y++)
@@ -144,8 +144,6 @@ public class BingoManager : MonoBehaviour
                 }
             }
         }
-
-        //Debug.Log("No");
     }
 
     void CheckBingo()
@@ -166,7 +164,6 @@ public class BingoManager : MonoBehaviour
         int count = 0;
         for (int x = 0; x < m_wide; x++)
         {
-            Debug.Log($"X :{x} Y :{y}");
             if (m_cells[x, y].RetuneStatus() == CellStatus.Open)
             {
                 count++;
@@ -191,7 +188,6 @@ public class BingoManager : MonoBehaviour
         x++;
         CheckHorizontal(x);
     }
-
     void CheckDiagonalDown(int x, int y, int count)
     {
         if (x == 5 && y == 5) return;
@@ -204,7 +200,6 @@ public class BingoManager : MonoBehaviour
         y++;
         CheckDiagonalDown(x, y, count);
     }
-
     void CheckDiagonalUp(int x, int y, int count)
     {
         if (y == 5) return;
